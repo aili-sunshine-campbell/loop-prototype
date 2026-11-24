@@ -6,7 +6,7 @@
   <meta name="theme-color" content="#f66b25">
   <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; font-src 'self'; media-src 'self'; connect-src 'none'; base-uri 'none'; form-action 'none'; object-src 'none'">
   <title>Loop</title>
-  <link rel="stylesheet" href="styles.css?v=27">
+  <link rel="stylesheet" href="styles.css?v=28">
 </head>
 <body>
   <div class="app">
@@ -343,6 +343,14 @@
             <p class="sheet__by" id="sheet-by"></p>
           </div>
           <p class="sheet__desc" id="sheet-desc"></p>
+          <!-- Home made items only: what the food contains (Figma 55965:12336) -->
+          <div class="sheet__contains" id="sheet-contains" hidden>
+            <img class="sheet__divider" src="assets/divider.svg" width="369" height="1" alt="">
+            <div>
+              <p class="overline" id="sheet-contains-label"><span>Contains</span></p>
+              <ul class="chips" id="sheet-chips" aria-labelledby="sheet-contains-label"></ul>
+            </div>
+          </div>
         </div>
         <button class="visually-hidden" type="button" id="sheet-close">Close</button>
       </div>
@@ -399,6 +407,6 @@
     </li>
   </template>
 
-  <script src="app.js?v=27"></script>
+  <script src="app.js?v=28"></script>
 </body>
 </html>

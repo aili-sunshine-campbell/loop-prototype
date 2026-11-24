@@ -22,10 +22,18 @@ const descriptions = {
   "Banana (browning)": "A bit brown on the outside but still good inside. Great for smoothies or banana bread.",
   "Redbull 0,25l": "Unopened can. I bought a pack of four and only needed three.",
   "Celcius 0,25l": "Unopened can from a multipack. Not my favourite flavour, so someone else should enjoy it.",
-  "Egg Sandwich": "Made this morning with free-range eggs and fresh bread. Contains egg, wheat and mustard.",
+  "Egg Sandwich": "Made this morning with free-range eggs and fresh bread.",
   "Sandwich": "Ham and cheese sandwich made at lunchtime. I made one too many for a meeting.",
   "Eggs": "Four free-range eggs, best before next week. Left over after baking.",
   "Yogurt": "Unopened strawberry yogurt, best before Friday.",
+};
+
+// Home made items only: "Contains" tags on the details sheet, keyed by item name.
+// Items not listed here (store-bought) show no Contains section.
+// Egg Sandwich is from the Figma design; Sandwich is a placeholder.
+const contains = {
+  "Egg Sandwich": ["Eggs", "Dairy", "Gluten"],
+  "Sandwich": ["Meat", "Dairy", "Gluten"],
 };
 
 // ---------- Shared state ----------
@@ -783,6 +791,14 @@ function openSheet(i) {
   $("sheet-title").textContent = item.name;
   $("sheet-by").textContent = item.by;
   $("sheet-desc").textContent = descriptions[item.name] || "";
+  const tags = contains[item.name] || [];
+  $("sheet-contains").hidden = tags.length === 0;
+  $("sheet-chips").replaceChildren(...tags.map((tag) => {
+    const li = document.createElement("li");
+    li.className = "chip";
+    li.textContent = tag;
+    return li;
+  }));
 
   // Purple while items are reserved, like the rest of the home page.
   $("sheet-stepper").classList.toggle("stepper--tertiary", reserved);

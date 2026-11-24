@@ -30,6 +30,7 @@
   --tertiary: #979eff;
   --tertiary-tint: #edefff;
   --tertiary-ink: #4f33cf;
+  --surface-light: #f4f4fa;
   --shadow-card: 0 2px 11px 0 rgba(0, 0, 0, 0.05);
 }
 
@@ -1128,3 +1129,32 @@ html.sheet-open, html.sheet-open body { overflow: hidden; }
 /* Real photo instead of the illustration (Figma 55965:11937). The square photo
    fills the width and is cropped like the design: shifted up ~31% of its overflow. */
 .sheet__media .card__img--photo { object-fit: cover; object-position: 50% 31%; }
+
+/* "Contains" tags for home made items (Figma 55965:12336) */
+.sheet__contains {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.sheet__contains[hidden] { display: none; }
+.sheet__divider { width: 100%; height: 1px; margin-top: 1px; }
+
+.chips {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.chip {
+  height: 31px;
+  padding: 0 12px;
+  display: inline-flex;
+  align-items: center;
+  border-radius: 16px;
+  background: var(--surface-light);
+  color: var(--text);
+  font-size: 14px;
+  line-height: 20px;
+}
