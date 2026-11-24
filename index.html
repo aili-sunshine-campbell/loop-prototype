@@ -1,0 +1,365 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f66b25">
+  <title>Loop</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css?v=23">
+</head>
+<body>
+  <div class="app">
+    <header class="toolbar">
+      <div class="toolbar__row">
+        <img class="logo" src="assets/coolloop-logo-white.svg" width="524" height="154" alt="Cool Loop">
+        <button class="icon-btn" type="button" aria-label="Profile">
+          <img src="assets/user.svg" width="18" height="20" alt="">
+        </button>
+      </div>
+    </header>
+
+    <main class="content" id="view-list">
+      <div class="actions">
+        <button class="btn btn--ghost" type="button" aria-haspopup="listbox">
+          <span>Tuas SMEG</span>
+          <img src="assets/chevron-down.svg" width="19" height="19" alt="">
+        </button>
+        <div class="menu-wrap">
+          <button class="btn btn--primary" type="button" id="add-food-btn" aria-haspopup="menu" aria-expanded="false" aria-controls="add-food-menu">
+            <span>Add food</span>
+            <img src="assets/chevron-forward.svg" width="19" height="19" alt="">
+          </button>
+          <ul class="menu" id="add-food-menu" role="menu" hidden>
+            <li role="none"><button class="menu__item" type="button" role="menuitem" data-food-type="home-made">Home made</button></li>
+            <li role="none"><button class="menu__item" type="button" role="menuitem" data-food-type="store-bought" data-nav="forward">Store-bought</button></li>
+          </ul>
+        </div>
+      </div>
+
+      <section class="items" id="items-section">
+        <p class="overline"><span><span id="item-count">0</span> items</span></p>
+        <ul class="grid" id="grid"></ul>
+      </section>
+
+      <!-- Reserved mode (after "Reserve items") -->
+      <section class="items" id="reserved-section" hidden>
+        <p class="overline"><span>Reserved items • <span id="reserved-left"></span></span></p>
+        <ul class="rows" id="reserved-rows"></ul>
+        <img class="section-divider" src="assets/divider-section.svg" width="369" height="20" alt="">
+        <p class="overline"><span>Add to reservation • <span id="add-count">0</span> items</span></p>
+        <ul class="grid" id="reserved-grid"></ul>
+      </section>
+    </main>
+
+    <main class="content" id="view-selection" hidden>
+      <div class="page-head">
+        <button class="page-head__back" type="button" id="back-btn" aria-label="Back to all items">
+          <img src="assets/chevron-back.svg" width="24" height="24" alt="">
+        </button>
+        <p class="page-head__eyebrow">Tuas SMEG</p>
+        <h1 class="page-head__title" id="selection-title">Your Selection</h1>
+      </div>
+
+      <div class="selection">
+        <section class="items">
+          <p class="overline"><span><span id="selection-count">0</span> items<span id="selection-left"></span></span></p>
+          <ul class="rows" id="rows"></ul>
+        </section>
+
+        <div class="reserve">
+          <img class="reserve__divider" src="assets/divider.svg" width="369" height="1" alt="">
+          <button class="reserve__item" type="button" data-go="reserve" data-nav="forward">
+            <img src="assets/timer.svg" width="24" height="24" alt="">
+            <span class="reserve__text">
+              <span class="reserve__title">Reserve instead</span>
+              <span class="reserve__desc">Too busy now? Reserve your items and retrieve them later in the day.</span>
+            </span>
+            <img src="assets/chevron-forward-grey.svg" width="24" height="24" alt="">
+          </button>
+          <button class="reserve__item" type="button" data-cancel>
+            <img src="assets/close-outline.svg" width="24" height="24" alt="">
+            <span class="reserve__text">
+              <span class="reserve__title">Cancel reservation</span>
+              <span class="reserve__desc">If you cannot pick up the food within the reserved time, please cancel your order.</span>
+            </span>
+            <img src="assets/chevron-forward-grey.svg" width="24" height="24" alt="">
+          </button>
+        </div>
+      </div>
+    </main>
+
+    <main class="content" id="view-timer" hidden>
+      <div class="timer-top">
+        <div class="page-head">
+          <button class="page-head__back" type="button" id="timer-back-btn" aria-label="Back to your selection">
+            <img src="assets/chevron-back.svg" width="24" height="24" alt="">
+          </button>
+          <p class="page-head__eyebrow">Tuas SMEG</p>
+          <h1 class="page-head__title" id="timer-title">Retrieve items</h1>
+        </div>
+
+        <div class="ring" role="timer" aria-live="off">
+          <svg class="ring__svg" viewBox="0 0 305 305" aria-hidden="true">
+            <circle class="ring__track" cx="152.5" cy="152.5" r="147.5" />
+            <circle class="ring__progress" id="ring-progress" cx="152.5" cy="152.5" r="147.5" pathLength="1" />
+          </svg>
+          <div class="ring__inner">
+            <p class="ring__time" id="timer-text">5:00</p>
+            <p class="ring__hint" id="timer-hint">Take your items from the fridge before the timer goes off</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="reserve">
+        <img class="reserve__divider" src="assets/divider.svg" width="369" height="1" alt="">
+        <button class="reserve__item" type="button" data-go="reserve" data-nav="forward">
+          <img src="assets/timer.svg" width="24" height="24" alt="">
+          <span class="reserve__text">
+            <span class="reserve__title">Reserve instead</span>
+            <span class="reserve__desc">Too busy now? Reserve your items and retrieve them later in the day.</span>
+          </span>
+          <img src="assets/chevron-forward-grey.svg" width="24" height="24" alt="">
+        </button>
+          <button class="reserve__item" type="button" data-cancel>
+            <img src="assets/close-outline.svg" width="24" height="24" alt="">
+            <span class="reserve__text">
+              <span class="reserve__title">Cancel reservation</span>
+              <span class="reserve__desc">If you cannot pick up the food within the reserved time, please cancel your order.</span>
+            </span>
+            <img src="assets/chevron-forward-grey.svg" width="24" height="24" alt="">
+          </button>
+      </div>
+    </main>
+
+    <main class="content" id="view-done" hidden>
+      <div class="page-head">
+        <p class="page-head__eyebrow">Tuas SMEG</p>
+        <h1 class="page-head__title">Retrieval complete</h1>
+      </div>
+      <div class="done">
+        <div class="done__badge">
+          <img src="assets/checkmark.svg" width="40" height="40" alt="">
+        </div>
+        <div class="done__text">
+          <!-- Taking food (default) -->
+          <h2 class="done__title" data-done="take">Thank you, and enjoy!</h2>
+          <p class="done__desc" data-done="take">You saved approximately<br><strong>10.5 grams</strong> of food.</p>
+          <!-- Adding food (after "Add to fridge") -->
+          <h2 class="done__title" data-done="add" hidden>Thank you for<br>your contribution</h2>
+          <p class="done__desc" data-done="add" hidden>If someone takes your added items, you would save <strong>250 grams</strong> of food.</p>
+        </div>
+      </div>
+    </main>
+
+    <main class="content" id="view-reserve" hidden>
+      <div class="page-head">
+        <button class="page-head__back" type="button" id="reserve-back-btn" aria-label="Back">
+          <img src="assets/chevron-back.svg" width="24" height="24" alt="">
+        </button>
+        <p class="page-head__eyebrow">Tuas SMEG</p>
+        <h1 class="page-head__title">Reserve Items</h1>
+      </div>
+
+      <div class="reserve-form">
+        <fieldset class="field">
+          <legend class="field__label">Reserve until</legend>
+          <div class="field__row">
+            <label class="select">
+              <span class="visually-hidden">Hour</span>
+              <select id="res-hour"></select>
+              <img src="assets/select-chevron.svg" width="22" height="22" alt="">
+            </label>
+            <label class="select">
+              <span class="visually-hidden">Minute</span>
+              <select id="res-min"></select>
+              <img src="assets/select-chevron.svg" width="22" height="22" alt="">
+            </label>
+          </div>
+        </fieldset>
+        <p class="field__hint">Pick a time between 09:00 and 17:00.</p>
+      </div>
+    </main>
+
+    <main class="content" id="view-scan" hidden>
+      <div class="page-head">
+        <button class="page-head__back" type="button" id="scan-back-btn" aria-label="Back">
+          <img src="assets/chevron-back.svg" width="24" height="24" alt="">
+        </button>
+        <p class="page-head__eyebrow">Tuas SMEG</p>
+        <h1 class="page-head__title">Scan Product(s)</h1>
+      </div>
+
+      <div class="scanner" id="scanner" data-state="idle">
+        <video class="scanner__video" id="scanner-video" playsinline muted></video>
+        <div class="scanner__frame" aria-hidden="true"><span class="scanner__line"></span></div>
+        <p class="scanner__status" id="scanner-status" aria-live="polite">Starting camera…</p>
+        <button class="scanner__fallback" type="button" id="scanner-simulate" hidden>Simulate scan</button>
+        <div class="scanner__result" id="scanner-result" hidden>
+          <div class="scanner__badge"><img src="assets/checkmark.svg" width="28" height="28" alt=""></div>
+          <p class="scanner__product" id="scanner-product"></p>
+          <p class="scanner__sub">Product recognised</p>
+        </div>
+      </div>
+    </main>
+
+    <main class="content" id="view-details" hidden>
+      <div class="page-head">
+        <button class="page-head__back" type="button" id="details-back-btn" aria-label="Back">
+          <img src="assets/chevron-back.svg" width="24" height="24" alt="">
+        </button>
+        <p class="page-head__eyebrow">Tuas SMEG</p>
+        <h1 class="page-head__title">Product details</h1>
+      </div>
+
+      <div class="details-hero">
+        <img class="details-hero__img" id="details-img" src="assets/can.png" alt="">
+      </div>
+
+      <div class="tf-row">
+        <div class="tf tf--grow">
+          <label class="tf__label" for="details-name">Product name</label>
+          <div class="tf__control">
+            <input class="tf__input" id="details-name" type="text" autocomplete="off">
+            <button class="tf__icon-btn" type="button" id="details-name-clear" aria-label="Clear product name">
+              <img src="assets/clear-x.svg" width="22" height="22" alt="">
+            </button>
+          </div>
+        </div>
+        <div class="tf tf--qty">
+          <label class="tf__label" for="details-qty">Quantity</label>
+          <div class="tf__control">
+            <select class="tf__input tf__select" id="details-qty"></select>
+            <img class="tf__icon" src="assets/qty-chevron.svg" width="22" height="22" alt="">
+          </div>
+        </div>
+      </div>
+
+      <div id="details-dates"></div>
+    </main>
+
+    <main class="content" id="view-pending" hidden>
+      <div class="page-head">
+        <button class="page-head__back" type="button" id="pending-back-btn" aria-label="Back">
+          <img src="assets/chevron-back.svg" width="24" height="24" alt="">
+        </button>
+        <p class="page-head__eyebrow">Tuas SMEG</p>
+        <h1 class="page-head__title">Items to add</h1>
+      </div>
+      <section class="items">
+        <p class="overline"><span><span id="pending-count">0</span> items</span></p>
+        <div class="pending">
+          <ul class="rows" id="pending-rows"></ul>
+          <div class="menu-wrap menu-wrap--end">
+            <button class="btn btn--primary" type="button" id="add-more-btn" aria-haspopup="menu" aria-expanded="false" aria-controls="add-more-menu">
+              <span>Add food</span>
+              <img src="assets/chevron-down-white.svg" width="19" height="19" alt="">
+            </button>
+            <ul class="menu" id="add-more-menu" role="menu" hidden>
+              <li role="none"><button class="menu__item" type="button" role="menuitem" data-food-type="home-made">Home made</button></li>
+              <li role="none"><button class="menu__item" type="button" role="menuitem" data-food-type="store-bought" data-nav="forward">Store-bought</button></li>
+            </ul>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <template id="pending-row-tpl">
+      <li class="row row--pending">
+        <div class="row__thumb"><img class="card__img" alt=""></div>
+        <span class="row__badge"></span>
+        <div class="row__main">
+          <p class="card__title"></p>
+        </div>
+        <button class="row__icon-btn" type="button" data-action="edit" data-nav="forward">
+          <img src="assets/pencil.svg" width="24" height="24" alt="">
+        </button>
+        <button class="row__icon-btn" type="button" data-action="delete">
+          <img src="assets/trash.svg" width="24" height="24" alt="">
+        </button>
+      </li>
+    </template>
+
+    <template id="date-field-tpl">
+      <div class="tf-group">
+        <div class="tf tf--date">
+          <label class="tf__label"></label>
+          <div class="tf__control">
+            <span class="tf__display is-empty">dd.mm.yyyy</span>
+            <input class="tf__date" type="date">
+            <img class="tf__icon" src="assets/calendar.svg" width="22" height="22" alt="">
+          </div>
+        </div>
+        <p class="tf__error" role="alert" hidden>You can only add products that have not yet expired.</p>
+      </div>
+    </template>
+
+    <div class="cta" id="cta" hidden>
+      <button class="btn-large" type="button" id="continue-btn" data-nav="forward">Continue (<span id="cta-count">0</span>)</button>
+    </div>
+    <div class="cta" id="cta-take" hidden>
+      <button class="btn-large" type="button" id="take-btn" data-nav="forward"><span id="take-label">Take from fridge</span> (<span id="take-count">0</span>)</button>
+    </div>
+    <div class="cta" id="cta-confirm" hidden>
+      <button class="btn-large" type="button" id="confirm-btn" data-nav="forward">Confirm</button>
+    </div>
+    <div class="cta" id="cta-done" hidden>
+      <button class="btn-large" type="button" id="home-btn">Return to main page</button>
+    </div>
+    <div class="cta" id="cta-reserved" hidden>
+      <button class="btn-large btn-large--tertiary" type="button" id="reserved-btn" data-nav="forward">Continue (<span id="reserved-count">0</span>)</button>
+    </div>
+    <div class="cta" id="cta-details" hidden>
+      <button class="btn-large" type="button" id="details-next-btn" data-nav="forward">Next</button>
+    </div>
+    <div class="cta" id="cta-pending" hidden>
+      <button class="btn-large" type="button" id="add-to-fridge-btn" data-nav="forward">Add to fridge (<span id="add-to-fridge-count">0</span>)</button>
+    </div>
+    <div class="cta" id="cta-reserve" hidden>
+      <button class="btn-large btn-large--tertiary" type="button" id="reserve-btn">Reserve items</button>
+    </div>
+  </div>
+
+  <template id="card-tpl">
+    <li class="card">
+      <div class="card__media">
+        <img class="card__img" alt="">
+      </div>
+      <div class="card__body">
+        <div class="card__title-row">
+          <h3 class="card__title"></h3>
+        </div>
+        <p class="card__meta"></p>
+      </div>
+    </li>
+  </template>
+
+  <template id="stepper-tpl">
+    <div class="stepper" data-count="0">
+      <button class="stepper__btn stepper__minus" type="button">
+        <img src="assets/remove.svg" width="18" height="18" alt="">
+      </button>
+      <span class="stepper__count" aria-live="polite">0</span>
+      <button class="stepper__btn stepper__plus" type="button">
+        <img src="assets/add.svg" width="18" height="18" alt="">
+      </button>
+    </div>
+  </template>
+
+  <template id="row-tpl">
+    <li class="row">
+      <div class="row__thumb"><img class="card__img" alt=""></div>
+      <div class="row__main">
+        <div class="row__text">
+          <p class="card__title"></p>
+          <p class="card__meta"></p>
+        </div>
+      </div>
+    </li>
+  </template>
+
+  <script src="app.js?v=24"></script>
+</body>
+</html>
