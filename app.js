@@ -135,12 +135,14 @@ function renderReserved() {
   $("add-count").textContent = available;
 }
 
-function reservedLeftText() {
+// Time left on the reservation, e.g. "1h 15m" or "45m".
+function reservedLeft() {
   const minsLeft = Math.max(0, Math.ceil((reservedUntil - Date.now()) / 60000));
   const h = Math.floor(minsLeft / 60);
   const m = minsLeft % 60;
-  return h ? `${h}h ${m}m left` : `${m}m left`;
+  return h ? `${h}h ${m}m` : `${m}m`;
 }
+const reservedLeftText = () => `${reservedLeft()} left`;
 
 function checkReservation() {
   if (reservedUntil && Date.now() >= reservedUntil) releaseReservation();
@@ -255,7 +257,8 @@ function updateChrome() {
   $("take-count").textContent = t;
   const reserved = !!reservedUntil;
   $("reserved-count").textContent = t;
-  $("reserved-left").textContent = reserved ? reservedLeftText() : "";
+  $("res-banner").hidden = !reserved || v !== "list";
+  $("res-banner-time").textContent = reserved ? reservedLeft() : "";
   $("selection-left").textContent = reserved ? ` • ${reservedLeftText()}` : "";
   $("selection-title").textContent = reserved ? "Your Reserved Items" : "Your Selection";
   $("take-label").textContent = reserved ? "Take reserved items" : "Take from fridge";
@@ -321,7 +324,11 @@ function route() {
   $("view-selection").hidden = v !== "selection";
   $("view-timer").hidden = v !== "timer";
   $("view-done").hidden = v !== "done";
-  document.querySelectorAll("[data-done]").forEach((el) => { el.hidden = el.dataset.done !== doneMode; });
+  // data-done lists the confirmation modes an element belongs to, e.g. "take add".
+  document.querySelectorAll("[data-done]").forEach((el) => {
+    el.hidden = !el.dataset.done.split(" ").includes(doneMode);
+  });
+  $("view-done").dataset.mode = doneMode;
   $("view-reserve").hidden = v !== "reserve";
   $("view-scan").hidden = v !== "scan";
   $("view-details").hidden = v !== "details";
@@ -351,7 +358,6 @@ $("timer-back-btn").addEventListener("click", () => history.back());
 
 // Confirm: items taken. Clear the selection and show the confirmation.
 // replaceState so the phone's Back button can't reopen the running timer.
-let doneMode = "take"; // which confirmation text to show: "take" or "add"
 let doneWasReserved = false; // confirmation page uses the purple theme after a reservation
 $("confirm-btn").addEventListener("click", () => {
   doneMode = timerMode;
@@ -379,8 +385,10 @@ document.querySelectorAll('[data-go="reserve"]').forEach((btn) =>
 );
 $("reserve-back-btn").addEventListener("click", () => history.back());
 
-// Reserve items: hold the selection until the chosen time,
-// then return to the home page in reserved mode.
+// Reserve items: hold the selection until the chosen time and show the
+// "Reservation complete" page. "Return to main page" then opens the home
+// page in reserved mode. replaceState so Back can't reopen the time picker.
+let doneMode = "take"; // which confirmation to show: "take", "add" or "reserved"
 $("reserve-btn").addEventListener("click", () => {
   const until = new Date();
   until.setHours(Number(hourSel.value), Number(minSel.value), 0, 0);
@@ -389,7 +397,10 @@ $("reserve-btn").addEventListener("click", () => {
   reservedUntil = until;
   clearInterval(reservedTickId);
   reservedTickId = setInterval(checkReservation, 15000);
-  goToList();
+  doneMode = "reserved";
+  navDir = "forward";
+  history.replaceState(null, "", location.pathname + location.search + "#done");
+  route();
 });
 // Reserved (N) → review reserved items, then the same timer + confirmation flow.
 $("reserved-btn").addEventListener("click", () => {

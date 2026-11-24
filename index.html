@@ -6,7 +6,7 @@
   <meta name="theme-color" content="#f66b25">
   <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; font-src 'self'; media-src 'self'; connect-src 'none'; base-uri 'none'; form-action 'none'; object-src 'none'">
   <title>Loop</title>
-  <link rel="stylesheet" href="styles.css?v=24">
+  <link rel="stylesheet" href="styles.css?v=25">
 </head>
 <body>
   <div class="app">
@@ -17,6 +17,8 @@
           <img src="assets/user.svg" width="18" height="20" alt="">
         </button>
       </div>
+      <!-- Reserved mode: time left, stays pinned under the toolbar (Figma 55965:10822) -->
+      <p class="res-banner" id="res-banner" hidden><strong id="res-banner-time"></strong> left for reserved items</p>
     </header>
 
     <main class="content" id="view-list">
@@ -44,7 +46,7 @@
 
       <!-- Reserved mode (after "Reserve items") -->
       <section class="items" id="reserved-section" hidden>
-        <p class="overline"><span>Reserved items • <span id="reserved-left"></span></span></p>
+        <p class="overline"><span>Reserved items</span></p>
         <ul class="rows" id="reserved-rows"></ul>
         <img class="section-divider" src="assets/divider-section.svg" width="369" height="20" alt="">
         <p class="overline"><span>Add to reservation • <span id="add-count">0</span> items</span></p>
@@ -135,13 +137,20 @@
     <main class="content" id="view-done" hidden>
       <div class="page-head">
         <p class="page-head__eyebrow">Tuas SMEG</p>
-        <h1 class="page-head__title">Retrieval complete</h1>
+        <h1 class="page-head__title">
+          <span data-done="take add">Retrieval complete</span>
+          <span data-done="reserved" hidden>Reservation complete</span>
+        </h1>
       </div>
       <div class="done">
         <div class="done__badge">
-          <img src="assets/checkmark.svg" width="40" height="40" alt="">
+          <img src="assets/checkmark.svg" width="40" height="40" alt="" data-done="take add">
+          <img src="assets/timer-light.svg" width="40" height="40" alt="" data-done="reserved" hidden>
         </div>
         <div class="done__text">
+          <!-- Reserving (after "Reserve items", Figma 55965:10752) -->
+          <h2 class="done__title" data-done="reserved" hidden>Items reserved</h2>
+          <p class="done__desc" data-done="reserved" hidden>Make sure you pick them up by the reserved time, or cancel the reservation.</p>
           <!-- Taking food (default) -->
           <h2 class="done__title" data-done="take">Thank you, and enjoy!</h2>
           <p class="done__desc" data-done="take">You saved approximately<br><strong>10.5 grams</strong> of food.</p>
@@ -358,6 +367,6 @@
     </li>
   </template>
 
-  <script src="app.js?v=24"></script>
+  <script src="app.js?v=25"></script>
 </body>
 </html>

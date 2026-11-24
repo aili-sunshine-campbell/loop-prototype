@@ -28,6 +28,8 @@
   --media-cool: #f5f5fa;
   --media-warm: #f9efe0;
   --tertiary: #979eff;
+  --tertiary-tint: #edefff;
+  --tertiary-ink: #4f33cf;
   --shadow-card: 0 2px 11px 0 rgba(0, 0, 0, 0.05);
 }
 
@@ -88,6 +90,21 @@ img { display: block; }
   height: 22px;  /* 524×154 artwork → ~75px wide */
   width: auto;
 }
+
+/* Reserved-mode banner: full-width strip under the toolbar row, inside the
+   sticky header so it stays at the top while scrolling. Negative margins
+   cancel the toolbar's side and bottom padding. */
+.res-banner {
+  margin: 16px -12px -16px;
+  min-height: 51px;
+  padding: 14px 16px 13px;
+  background: var(--tertiary-tint);
+  color: var(--tertiary-ink);
+  font-size: 14px;
+  line-height: 20px;
+}
+.res-banner[hidden] { display: none; }
+.res-banner strong { font-weight: 700; }
 
 .icon-btn {
   width: 24px;
@@ -536,6 +553,9 @@ img { display: block; }
   display: grid;
   place-items: center;
 }
+.done__badge img[hidden] { display: none; }
+/* "Reservation complete": purple badge with the timer icon */
+#view-done[data-mode="reserved"] .done__badge { background: var(--tertiary); }
 .done__text {
   display: flex;
   flex-direction: column;
