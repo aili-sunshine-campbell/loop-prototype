@@ -1,7 +1,7 @@
 // Prototype data — mirrors the Figma frame "iPhone 14 & 15 Pro - 1"
 const items = [
   { name: "Redbull 0,25l",     by: "Added by Nicole. H", img: "can.png",      variant: "can" },
-  { name: "Banana",            by: "Added by Nicole. H", img: "banana.png" },
+  { name: "Banana",            by: "Added by Nicole. H", img: "banana.png",   photo: "banana-photo.jpg" },
   { name: "Egg Sandwich",      by: "Made by Nicole. H",  img: "sandwich.png", warm: true, veg: true },
   { name: "Celcius 0,25l",     by: "Added by Nicole. H", img: "can.png",      variant: "can" },
   { name: "Banana (browning)", by: "Added by Nicole. H", img: "banana.png" },
@@ -9,7 +9,7 @@ const items = [
   { name: "Sandwich",          by: "Made by Nicole. H",  img: "sandwich.png", warm: true },
   { name: "Yogurt",            by: "Added by Nicole. H", img: "yogurt.png",   variant: "contain" },
   { name: "Redbull 0,25l",     by: "Added by Nicole. H", img: "can.png",      variant: "can" },
-  { name: "Banana",            by: "Added by Nicole. H", img: "banana.png" },
+  { name: "Banana",            by: "Added by Nicole. H", img: "banana.png",   photo: "banana-photo.jpg" },
   { name: "Egg Sandwich",      by: "Made by Nicole. H",  img: "sandwich.png", warm: true, veg: true },
   { name: "Celcius 0,25l",     by: "Added by Nicole. H", img: "can.png",      variant: "can" },
 ];
@@ -770,10 +770,16 @@ function openSheet(i) {
   sheetQty = counts[i] || 1;
   sheetOpener = document.activeElement;
 
+  // Items with a `photo` show it here instead of the illustration (cards keep the illustration).
   const img = $("sheet-img");
   img.className = "card__img";
-  fillImage(img, item);
-  $("sheet-media").classList.toggle("sheet__media--warm", !!item.warm);
+  if (item.photo) {
+    img.src = `assets/${item.photo}`;
+    img.classList.add("card__img--photo");
+  } else {
+    fillImage(img, item);
+  }
+  $("sheet-media").classList.toggle("sheet__media--warm", !!item.warm && !item.photo);
   $("sheet-title").textContent = item.name;
   $("sheet-by").textContent = item.by;
   $("sheet-desc").textContent = descriptions[item.name] || "";

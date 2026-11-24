@@ -1124,3 +1124,7 @@ html.sheet-open, html.sheet-open body { overflow: hidden; }
   font-size: 20px;
   line-height: 1;
 }
+
+/* Real photo instead of the illustration (Figma 55965:11937). The square photo
+   fills the width and is cropped like the design: shifted up ~31% of its overflow. */
+.sheet__media .card__img--photo { object-fit: cover; object-position: 50% 31%; }
