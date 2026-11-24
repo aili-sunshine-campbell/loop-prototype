@@ -1126,9 +1126,9 @@ html.sheet-open, html.sheet-open body { overflow: hidden; }
   line-height: 1;
 }
 
-/* Real photo instead of the illustration (Figma 55965:11937). The square photo
-   fills the width and is cropped like the design: shifted up ~31% of its overflow. */
-.sheet__media .card__img--photo { object-fit: cover; object-position: 50% 31%; }
+/* Real photo instead of the illustration (Figma 55965:11937). It fills the frame;
+   which part stays visible is set per item (photoPos in app.js). */
+.sheet__media .card__img--photo { object-fit: cover; }
 
 /* "Contains" tags for home made items (Figma 55965:12336) */
 .sheet__contains {

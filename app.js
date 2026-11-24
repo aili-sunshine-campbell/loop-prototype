@@ -1,16 +1,19 @@
 // Prototype data — mirrors the Figma frame "iPhone 14 & 15 Pro - 1"
+// `photo` (optional): real photo for the details sheet instead of the illustration.
+// `photoPos` (optional): which part of the photo to keep in the 240px-tall frame,
+// as CSS object-position ("50% 0%" = top, "50% 100%" = bottom). Default: centre.
 const items = [
-  { name: "Redbull 0,25l",     by: "Added by Nicole. H", img: "can.png",      variant: "can" },
-  { name: "Banana",            by: "Added by Nicole. H", img: "banana.png",   photo: "banana-photo.jpg" },
-  { name: "Egg Sandwich",      by: "Made by Nicole. H",  img: "sandwich.png", warm: true, veg: true },
+  { name: "Redbull 0,25l",     by: "Added by Nicole. H", img: "can.png",      variant: "can",     photo: "redbull-photo.jpg",  photoPos: "50% 56%" },
+  { name: "Banana",            by: "Added by Nicole. H", img: "banana.png",                       photo: "banana-photo.jpg",   photoPos: "50% 31%" },
+  { name: "Egg Sandwich",      by: "Made by Nicole. H",  img: "sandwich.png", warm: true, veg: true, photo: "sandwich-photo.jpg", photoPos: "50% 70%" },
   { name: "Celcius 0,25l",     by: "Added by Nicole. H", img: "can.png",      variant: "can" },
   { name: "Banana (browning)", by: "Added by Nicole. H", img: "banana.png" },
   { name: "Eggs",              by: "Added by Nicole. H", img: "eggs.png" },
-  { name: "Sandwich",          by: "Made by Nicole. H",  img: "sandwich.png", warm: true },
-  { name: "Yogurt",            by: "Added by Nicole. H", img: "yogurt.png",   variant: "contain" },
-  { name: "Redbull 0,25l",     by: "Added by Nicole. H", img: "can.png",      variant: "can" },
-  { name: "Banana",            by: "Added by Nicole. H", img: "banana.png",   photo: "banana-photo.jpg" },
-  { name: "Egg Sandwich",      by: "Made by Nicole. H",  img: "sandwich.png", warm: true, veg: true },
+  { name: "Sandwich",          by: "Made by Nicole. H",  img: "sandwich.png", warm: true,         photo: "sandwich-photo.jpg", photoPos: "50% 70%" },
+  { name: "Yogurt",            by: "Added by Nicole. H", img: "yogurt.png",   variant: "contain", photo: "yogurt-photo.jpg",   photoPos: "50% 15%" },
+  { name: "Redbull 0,25l",     by: "Added by Nicole. H", img: "can.png",      variant: "can",     photo: "redbull-photo.jpg",  photoPos: "50% 56%" },
+  { name: "Banana",            by: "Added by Nicole. H", img: "banana.png",                       photo: "banana-photo.jpg",   photoPos: "50% 31%" },
+  { name: "Egg Sandwich",      by: "Made by Nicole. H",  img: "sandwich.png", warm: true, veg: true, photo: "sandwich-photo.jpg", photoPos: "50% 70%" },
   { name: "Celcius 0,25l",     by: "Added by Nicole. H", img: "can.png",      variant: "can" },
 ];
 
@@ -25,7 +28,7 @@ const descriptions = {
   "Egg Sandwich": "Made this morning with free-range eggs and fresh bread.",
   "Sandwich": "Ham and cheese sandwich made at lunchtime. I made one too many for a meeting.",
   "Eggs": "Four free-range eggs, best before next week. Left over after baking.",
-  "Yogurt": "Unopened strawberry yogurt, best before Friday.",
+  "Yogurt": "Unopened blueberry Greek yogurt, best before Friday.",
 };
 
 // Home made items only: "Contains" tags on the details sheet, keyed by item name.
@@ -805,9 +808,11 @@ function openSheet(i) {
   // Items with a `photo` show it here instead of the illustration (cards keep the illustration).
   const img = $("sheet-img");
   img.className = "card__img";
+  img.style.objectPosition = "";
   if (item.photo) {
     img.src = `assets/${item.photo}`;
     img.classList.add("card__img--photo");
+    img.style.objectPosition = item.photoPos || "";
   } else {
     fillImage(img, item);
   }
