@@ -6,7 +6,7 @@
   <meta name="theme-color" content="#f66b25">
   <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; font-src 'self'; media-src 'self'; connect-src 'none'; base-uri 'none'; form-action 'none'; object-src 'none'">
   <title>Loop</title>
-  <link rel="stylesheet" href="styles.css?v=28">
+  <link rel="stylesheet" href="styles.css?v=29">
 </head>
 <body>
   <div class="app">
@@ -153,10 +153,10 @@
           <p class="done__desc" data-done="reserved" hidden>Make sure you pick them up by the reserved time, or cancel the reservation.</p>
           <!-- Taking food (default) -->
           <h2 class="done__title" data-done="take">Thank you, and enjoy!</h2>
-          <p class="done__desc" data-done="take">You saved approximately<br><strong>10.5 grams</strong> of food.</p>
+          <p class="done__desc" data-done="take">You saved approximately<br><strong id="saved-take"></strong> of food.</p>
           <!-- Adding food (after "Add to fridge") -->
           <h2 class="done__title" data-done="add" hidden>Thank you for<br>your contribution</h2>
-          <p class="done__desc" data-done="add" hidden>If someone takes your added items, you would save <strong>250 grams</strong> of food.</p>
+          <p class="done__desc" data-done="add" hidden>If someone takes your added items, you would save <strong id="saved-add"></strong> of food.</p>
         </div>
       </div>
     </main>
@@ -407,6 +407,6 @@
     </li>
   </template>
 
-  <script src="app.js?v=28"></script>
+  <script src="app.js?v=29"></script>
 </body>
 </html>

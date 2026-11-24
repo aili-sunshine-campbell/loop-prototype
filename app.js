@@ -36,6 +36,26 @@ const contains = {
   "Sandwich": ["Meat", "Dairy", "Gluten"],
 };
 
+// Approximate edible weight of one of each item, in grams. Used for "You saved
+// approximately … of food" on the confirmation page (quantity × weight, summed).
+const GRAMS = {
+  "Redbull 0,25l": 250,     // 250 ml can
+  "Celcius 0,25l": 250,     // 250 ml can
+  "Banana": 120,            // one medium banana, peeled
+  "Banana (browning)": 120,
+  "Egg Sandwich": 180,
+  "Sandwich": 200,
+  "Eggs": 200,              // four eggs, ~50 g each
+  "Yogurt": 150,            // one pot
+};
+const DEFAULT_GRAMS = 250;  // a scanned product with an unknown name: about one can or pack
+// Store-bought names typed on Product details may use "." instead of "," ("Redbull 0.25l").
+const gramsOf = (name) => GRAMS[name] ?? GRAMS[name.replace(".", ",")] ?? DEFAULT_GRAMS;
+
+function formatWeight(g) {
+  return g >= 1000 ? `${(g / 1000).toFixed(1).replace(/\.0$/, "")} kg` : `${Math.round(g)} grams`;
+}
+
 // ---------- Shared state ----------
 const counts = items.map(() => 0);
 const steppers = items.map(() => new Set()); // every stepper showing item i
@@ -399,6 +419,8 @@ $("confirm-btn").addEventListener("click", () => {
   doneMode = timerMode;
   if (timerMode === "add") {
     // Items are in the fridge: clear the list and show the contribution message.
+    const added = pendingItems.reduce((g, e) => g + e.qty * gramsOf(e.name), 0);
+    $("saved-add").textContent = formatWeight(added);
     stopTimer();
     pendingItems.length = 0;
     editIndex = null;
@@ -406,6 +428,8 @@ $("confirm-btn").addEventListener("click", () => {
     history.replaceState(null, "", location.pathname + location.search + "#done");
     return route();
   }
+  const saved = items.reduce((g, item, i) => g + counts[i] * gramsOf(item.name), 0);
+  $("saved-take").textContent = formatWeight(saved);
   stopTimer();
   doneWasReserved = !!reservedUntil;
   clearInterval(reservedTickId);
