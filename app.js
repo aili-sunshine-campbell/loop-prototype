@@ -14,6 +14,20 @@ const items = [
   { name: "Celcius 0,25l",     by: "Added by Nicole. H", img: "can.png",      variant: "can" },
 ];
 
+// What the person who added each item wrote about it, shown on the item's
+// details sheet. Keyed by item name; "\n" starts a new line.
+// Banana is the text from the Figma design; the others are placeholders.
+const descriptions = {
+  "Banana": "I bought this a few days ago at K-Supermarket and would like to get rid of it because I am leaving on a one month trip to Spain.\nThe banana was green when I bought it an is in good condition now.",
+  "Banana (browning)": "A bit brown on the outside but still good inside. Great for smoothies or banana bread.",
+  "Redbull 0,25l": "Unopened can. I bought a pack of four and only needed three.",
+  "Celcius 0,25l": "Unopened can from a multipack. Not my favourite flavour, so someone else should enjoy it.",
+  "Egg Sandwich": "Made this morning with free-range eggs and fresh bread. Contains egg, wheat and mustard.",
+  "Sandwich": "Ham and cheese sandwich made at lunchtime. I made one too many for a meeting.",
+  "Eggs": "Four free-range eggs, best before next week. Left over after baking.",
+  "Yogurt": "Unopened strawberry yogurt, best before Friday.",
+};
+
 // ---------- Shared state ----------
 const counts = items.map(() => 0);
 const steppers = items.map(() => new Set()); // every stepper showing item i
@@ -78,6 +92,20 @@ function makeCard(item, i, tertiary = false) {
   }
 
   media.append(makeStepper(i, tertiary));
+
+  // Tapping the card (but not its stepper) opens the item's details sheet.
+  card.tabIndex = 0;
+  card.setAttribute("role", "button");
+  card.setAttribute("aria-label", `${item.name}, show details`);
+  card.addEventListener("click", (e) => {
+    if (!e.target.closest(".stepper")) openSheet(i);
+  });
+  card.addEventListener("keydown", (e) => {
+    if (e.target === card && (e.key === "Enter" || e.key === " ")) {
+      e.preventDefault();
+      openSheet(i);
+    }
+  });
   return card;
 }
 
@@ -715,6 +743,124 @@ document.addEventListener("keydown", (e) => {
   if (open) { setMenu(open, false); open.btn.focus(); }
 });
 window.addEventListener("hashchange", closeAllMenus);
+
+// ---------- Item details sheet (Figma 55965:11639) ----------
+// Slides up over the home page when a card is tapped. It adds a history entry
+// (same URL, so no screen change), so the phone's Back button closes it.
+// Also closes on a swipe down from the image, a tap above the sheet, or Escape.
+// "Add" sets the item's quantity on the home page to the sheet's quantity.
+const sheet = $("sheet");
+const sheetScrim = $("sheet-scrim");
+sheet.tabIndex = -1; // focusable, so screen readers start reading at the sheet
+const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)");
+let sheetIndex = null; // item shown in the sheet, or null when closed
+let sheetQty = 1;
+let sheetOpener = null; // card to give focus back to on close
+
+function renderSheetQty() {
+  $("sheet-stepper").dataset.count = sheetQty;
+  $("sheet-count").textContent = sheetQty;
+  $("sheet-minus").disabled = sheetQty <= 1;
+}
+
+function openSheet(i) {
+  const item = items[i];
+  const reserved = !!reservedUntil;
+  sheetIndex = i;
+  sheetQty = counts[i] || 1;
+  sheetOpener = document.activeElement;
+
+  const img = $("sheet-img");
+  img.className = "card__img";
+  fillImage(img, item);
+  $("sheet-media").classList.toggle("sheet__media--warm", !!item.warm);
+  $("sheet-title").textContent = item.name;
+  $("sheet-by").textContent = item.by;
+  $("sheet-desc").textContent = descriptions[item.name] || "";
+
+  // Purple while items are reserved, like the rest of the home page.
+  $("sheet-stepper").classList.toggle("stepper--tertiary", reserved);
+  $("sheet-minus").querySelector("img").src = reserved ? "assets/remove-tertiary.svg" : "assets/remove.svg";
+  $("sheet-plus").querySelector("img").src = reserved ? "assets/add-tertiary.svg" : "assets/add.svg";
+  $("sheet-minus").setAttribute("aria-label", `One fewer ${item.name}`);
+  $("sheet-plus").setAttribute("aria-label", `One more ${item.name}`);
+  renderSheetQty();
+
+  sheet.classList.remove("sheet--closing");
+  sheet.style.transform = "";
+  sheet.querySelector(".sheet__scroll").scrollTop = 0;
+  sheet.hidden = false;
+  sheetScrim.hidden = false;
+  document.documentElement.classList.add("sheet-open");
+  history.pushState({ sheet: i }, "");
+  sheet.focus({ preventScroll: true });
+}
+
+// fromHistory: the Back button already removed the sheet's history entry.
+function closeSheet(fromHistory = false) {
+  if (sheetIndex === null) return;
+  sheetIndex = null;
+  if (!fromHistory) history.back();
+  let done = false;
+  const finish = () => {
+    if (done || sheetIndex !== null) return; // already finished, or reopened meanwhile
+    done = true;
+    sheet.hidden = true;
+    sheetScrim.hidden = true;
+    sheet.classList.remove("sheet--closing");
+    sheet.style.transform = "";
+    document.documentElement.classList.remove("sheet-open");
+    if (sheetOpener && document.contains(sheetOpener)) sheetOpener.focus({ preventScroll: true });
+  };
+  if (reduceMotion.matches) return finish();
+  sheet.classList.add("sheet--closing");
+  sheet.addEventListener("animationend", finish, { once: true });
+  setTimeout(finish, 400); // in case animationend never fires (e.g. background tab)
+}
+
+window.addEventListener("popstate", () => {
+  if (sheetIndex !== null && !(history.state && "sheet" in history.state)) closeSheet(true);
+});
+
+$("sheet-minus").addEventListener("click", () => { sheetQty = Math.max(1, sheetQty - 1); renderSheetQty(); });
+$("sheet-plus").addEventListener("click", () => { sheetQty += 1; renderSheetQty(); });
+$("sheet-add").addEventListener("click", () => {
+  const i = sheetIndex;
+  closeSheet();
+  setCount(i, sheetQty);
+});
+$("sheet-close").addEventListener("click", () => closeSheet());
+sheetScrim.addEventListener("click", () => closeSheet());
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape" && sheetIndex !== null) closeSheet();
+});
+
+// Swipe down on the image to close; a short drag springs back.
+{
+  const handle = $("sheet-media");
+  let startY = null;
+  let dy = 0;
+  handle.addEventListener("pointerdown", (e) => {
+    startY = e.clientY;
+    dy = 0;
+    handle.setPointerCapture(e.pointerId);
+    sheet.style.transition = "none";
+  });
+  handle.addEventListener("pointermove", (e) => {
+    if (startY === null) return;
+    dy = Math.max(0, e.clientY - startY);
+    sheet.style.transform = dy ? `translateY(${dy}px)` : "";
+  });
+  const end = () => {
+    if (startY === null) return;
+    startY = null;
+    sheet.style.transition = "";
+    if (dy > 100) closeSheet();
+    else sheet.style.transform = "";
+  };
+  handle.addEventListener("pointerup", end);
+  handle.addEventListener("pointercancel", end);
+}
 
 window.addEventListener("hashchange", route);
 route();

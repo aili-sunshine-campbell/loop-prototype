@@ -6,7 +6,7 @@
   <meta name="theme-color" content="#f66b25">
   <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; font-src 'self'; media-src 'self'; connect-src 'none'; base-uri 'none'; form-action 'none'; object-src 'none'">
   <title>Loop</title>
-  <link rel="stylesheet" href="styles.css?v=25">
+  <link rel="stylesheet" href="styles.css?v=26">
 </head>
 <body>
   <div class="app">
@@ -327,6 +327,38 @@
     <div class="cta" id="cta-reserve" hidden>
       <button class="btn-large btn-large--tertiary" type="button" id="reserve-btn">Reserve items</button>
     </div>
+
+    <!-- Item details: slides up when a card on the home page is tapped (Figma 55965:11639).
+         Closes with the phone's Back button, a swipe down, or a tap above the sheet. -->
+    <div class="sheet-scrim" id="sheet-scrim" hidden></div>
+    <section class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheet-title" hidden>
+      <div class="sheet__scroll">
+        <div class="sheet__media" id="sheet-media">
+          <img class="card__img" id="sheet-img" alt="">
+          <span class="sheet__grabber" aria-hidden="true"></span>
+        </div>
+        <div class="sheet__body">
+          <div class="sheet__head">
+            <h2 class="sheet__title" id="sheet-title"></h2>
+            <p class="sheet__by" id="sheet-by"></p>
+          </div>
+          <p class="sheet__desc" id="sheet-desc"></p>
+        </div>
+        <button class="visually-hidden" type="button" id="sheet-close">Close</button>
+      </div>
+      <div class="sheet__actions">
+        <div class="stepper stepper--large" id="sheet-stepper" data-count="1">
+          <button class="stepper__btn stepper__minus" type="button" id="sheet-minus" aria-label="One fewer">
+            <img src="assets/remove.svg" width="28" height="28" alt="">
+          </button>
+          <span class="stepper__count" id="sheet-count" aria-live="polite">1</span>
+          <button class="stepper__btn stepper__plus" type="button" id="sheet-plus" aria-label="One more">
+            <img src="assets/add.svg" width="28" height="28" alt="">
+          </button>
+        </div>
+        <button class="btn-large sheet__add" type="button" id="sheet-add">Add</button>
+      </div>
+    </section>
   </div>
 
   <template id="card-tpl">
@@ -367,6 +399,6 @@
     </li>
   </template>
 
-  <script src="app.js?v=25"></script>
+  <script src="app.js?v=26"></script>
 </body>
 </html>

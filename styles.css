@@ -995,3 +995,132 @@ body { overflow-x: clip; } /* no sideways scroll while a screen slides in */
 .app.timer-add #view-timer .reserve { display: none; }
 /* "Add food" on Items to add: right-aligned pill; menu opens under its right edge */
 .menu-wrap--end { align-self: flex-end; }
+
+/* ---------- Item details sheet (Figma 55965:11639) ----------
+   Slides up over the home page when a card is tapped. The orange toolbar
+   stays visible above it. */
+.card[role="button"] { cursor: pointer; }
+.card[role="button"]:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+
+html.sheet-open, html.sheet-open body { overflow: hidden; }
+
+.sheet-scrim {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+}
+.sheet-scrim[hidden] { display: none; }
+
+.sheet {
+  position: fixed;
+  top: calc(12px + env(safe-area-inset-top));
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 41;
+  max-width: 430px;
+  margin: 0 auto;
+  background: var(--surface);
+  border-radius: 24px 24px 0 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  outline: none;
+  transition: transform 0.2s ease;
+  animation: sheet-up 0.32s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.sheet[hidden] { display: none; }
+.sheet--closing { animation: sheet-down 0.25s ease-in forwards; }
+
+@keyframes sheet-up   { from { transform: translateY(100%); } }
+@keyframes sheet-down { to   { transform: translateY(100%); } }
+@media (prefers-reduced-motion: reduce) {
+  .sheet, .sheet--closing { animation: none; }
+}
+
+.sheet__scroll {
+  flex: 1;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  /* room for the floating stepper + Add button */
+  padding-bottom: calc(92px + env(safe-area-inset-bottom));
+}
+
+.sheet__media {
+  position: relative;
+  height: 240px;
+  background: var(--media-cool);
+  overflow: hidden;
+  touch-action: none; /* lets the swipe-down gesture through */
+}
+.sheet__media--warm { background: var(--media-warm); }
+
+.sheet__grabber {
+  position: absolute;
+  top: 16px;
+  left: 50%;
+  width: 59px;
+  height: 6px;
+  margin-left: -29.5px;
+  border-radius: 8px;
+  background: #d9d9d9;
+}
+
+.sheet__body {
+  padding: 16px 12px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.sheet__head {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.sheet__title {
+  margin: 0;
+  font-size: 26px;
+  font-weight: 700;
+  line-height: 1.2;
+  color: #000;
+}
+.sheet__by {
+  margin: 0;
+  font-size: 16px;
+  line-height: 24px;
+  color: var(--text-medium);
+}
+.sheet__desc {
+  margin: 0;
+  font-size: 16px;
+  line-height: 24px;
+  color: var(--text);
+  white-space: pre-line; /* line breaks in the description start new lines */
+}
+
+.sheet__actions {
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: calc(12px + env(safe-area-inset-bottom));
+  display: flex;
+  gap: 8px;
+}
+.sheet__add { flex: 1; width: auto; }
+
+/* Large stepper: same as the card stepper, sized like a large button */
+.stepper--large {
+  height: 56px;
+  padding: 0 20px;
+  gap: 12px;
+  border-width: 1.5px;
+  border-radius: 200px;
+  filter: drop-shadow(0 2px 5.3px rgba(0, 0, 0, 0.5));
+}
+.stepper--large .stepper__btn { width: 28px; height: 28px; }
+.stepper--large .stepper__btn img { width: 28px; height: 28px; }
+.stepper--large .stepper__count {
+  min-width: 12px;
+  font-size: 20px;
+  line-height: 1;
+}
