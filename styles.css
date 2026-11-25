@@ -1068,7 +1068,7 @@ html.sheet-open, html.sheet-open body { overflow: hidden; }
 }
 
 .sheet__body {
-  padding: 16px 12px 0;
+  padding: 16px 16px 0;
   display: flex;
   flex-direction: column;
   gap: 16px;
