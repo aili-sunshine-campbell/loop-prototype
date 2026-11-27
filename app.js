@@ -731,8 +731,7 @@ $("pending-rows").addEventListener("click", (e) => {
   }
 });
 $("pending-back-btn").addEventListener("click", () => history.back());
-// Add food (Items to add): scan another store-bought product via the dropdown.
-// "Add food" here opens the same Home made / Store-bought dropdown as on the home page (see below).
+// Add food (Items to add): scan another product (see "Add food buttons" below).
 // Add to fridge → the same 5-minute timer, in "add" mode.
 $("add-to-fridge-btn").addEventListener("click", () => {
   setTimerMode("add");
@@ -748,44 +747,11 @@ scanner.addEventListener("click", (e) => {
 });
 $("scan-back-btn").addEventListener("click", () => history.back());
 
-// ---------- Add food dropdowns ----------
-// Used by "Add food" on the home page and on Items to add: same options.
-// Opens under its button; closes on picking an option, tapping elsewhere,
-// pressing Escape, or changing screen. Store-bought → scanner; Home made → not wired yet.
-const menus = [...document.querySelectorAll(".menu-wrap")].map((wrap) => ({
-  btn: wrap.querySelector('[aria-haspopup="menu"]'),
-  menu: wrap.querySelector(".menu"),
-}));
-
-function setMenu(m, open) {
-  m.menu.hidden = !open;
-  m.btn.setAttribute("aria-expanded", String(open));
-}
-const closeAllMenus = () => menus.forEach((m) => setMenu(m, false));
-
-menus.forEach((m) => {
-  m.btn.addEventListener("click", (e) => {
-    e.stopPropagation();
-    const open = m.menu.hidden;
-    closeAllMenus();
-    setMenu(m, open);
-  });
-  m.menu.addEventListener("click", (e) => {
-    const item = e.target.closest(".menu__item");
-    if (!item) return;
-    setMenu(m, false);
-    if (item.dataset.foodType === "store-bought") location.hash = "scan";
-  });
-});
-document.addEventListener("click", (e) => {
-  if (!e.target.closest(".menu-wrap")) closeAllMenus();
-});
-document.addEventListener("keydown", (e) => {
-  if (e.key !== "Escape") return;
-  const open = menus.find((m) => !m.menu.hidden);
-  if (open) { setMenu(open, false); open.btn.focus(); }
-});
-window.addEventListener("hashchange", closeAllMenus);
+// ---------- Add food buttons ----------
+// "Add food" on the home page and on Items to add goes straight to the scanner.
+["add-food-btn", "add-more-btn"].forEach((id) =>
+  $(id).addEventListener("click", () => { location.hash = "scan"; })
+);
 
 // ---------- Item details sheet (Figma 55965:11639) ----------
 // Slides up over the home page when a card is tapped. It adds a history entry

@@ -28,14 +28,10 @@
           <img src="assets/chevron-down.svg" width="19" height="19" alt="">
         </button>
         <div class="menu-wrap">
-          <button class="btn btn--primary" type="button" id="add-food-btn" aria-haspopup="menu" aria-expanded="false" aria-controls="add-food-menu">
+          <button class="btn btn--primary" type="button" id="add-food-btn" data-nav="forward">
             <span>Add food</span>
             <img src="assets/chevron-forward.svg" width="19" height="19" alt="">
           </button>
-          <ul class="menu" id="add-food-menu" role="menu" hidden>
-            <li role="none"><button class="menu__item" type="button" role="menuitem" data-food-type="home-made">Home made</button></li>
-            <li role="none"><button class="menu__item" type="button" role="menuitem" data-food-type="store-bought" data-nav="forward">Store-bought</button></li>
-          </ul>
         </div>
       </div>
 
@@ -292,14 +288,10 @@
         <div class="pending">
           <ul class="rows" id="pending-rows"></ul>
           <div class="menu-wrap menu-wrap--end">
-            <button class="btn btn--primary" type="button" id="add-more-btn" aria-haspopup="menu" aria-expanded="false" aria-controls="add-more-menu">
+            <button class="btn btn--primary" type="button" id="add-more-btn" data-nav="forward">
               <span>Add food</span>
-              <img src="assets/chevron-down-white.svg" width="19" height="19" alt="">
+              <img src="assets/chevron-forward.svg" width="19" height="19" alt="">
             </button>
-            <ul class="menu" id="add-more-menu" role="menu" hidden>
-              <li role="none"><button class="menu__item" type="button" role="menuitem" data-food-type="home-made">Home made</button></li>
-              <li role="none"><button class="menu__item" type="button" role="menuitem" data-food-type="store-bought" data-nav="forward">Store-bought</button></li>
-            </ul>
           </div>
         </div>
       </section>
@@ -439,6 +431,6 @@
     </li>
   </template>
 
-  <script src="app.js?v=35"></script>
+  <script src="app.js?v=36"></script>
 </body>
 </html>
