@@ -1,55 +1,39 @@
-// Prototype data — mirrors the Figma frame "iPhone 14 & 15 Pro - 1"
+// Prototype data — mirrors the Figma frame "iPhone 14 & 15 Pro - 28" (55978:12522)
 // `photo` (optional): real photo for the details sheet instead of the illustration.
 // `photoPos` (optional): which part of the photo to keep in the 240px-tall frame,
 // as CSS object-position ("50% 0%" = top, "50% 100%" = bottom). Default: centre.
 const items = [
-  { name: "Redbull 0,25l",     by: "Added by Nicole. H", img: "can.png",      variant: "can",     photo: "redbull-photo.jpg",  photoPos: "50% 56%" },
-  { name: "Banana",            by: "Added by Nicole. H", img: "banana.png",                       photo: "banana-photo.jpg",   photoPos: "50% 31%" },
-  { name: "Egg Sandwich",      by: "Made by Nicole. H",  img: "sandwich.png", warm: true, veg: true, photo: "sandwich-photo.jpg", photoPos: "50% 70%" },
-  { name: "Celcius 0,25l",     by: "Added by Nicole. H", img: "can.png",      variant: "can" },
-  { name: "Banana (browning)", by: "Added by Nicole. H", img: "banana.png" },
-  { name: "Eggs",              by: "Added by Nicole. H", img: "eggs.png" },
-  { name: "Sandwich",          by: "Made by Nicole. H",  img: "sandwich.png", warm: true,         photo: "sandwich-photo.jpg", photoPos: "50% 70%" },
-  { name: "Yogurt",            by: "Added by Nicole. H", img: "yogurt.png",   variant: "contain", photo: "yogurt-photo.jpg",   photoPos: "50% 15%" },
-  { name: "Redbull 0,25l",     by: "Added by Nicole. H", img: "can.png",      variant: "can",     photo: "redbull-photo.jpg",  photoPos: "50% 56%" },
-  { name: "Banana",            by: "Added by Nicole. H", img: "banana.png",                       photo: "banana-photo.jpg",   photoPos: "50% 31%" },
-  { name: "Egg Sandwich",      by: "Made by Nicole. H",  img: "sandwich.png", warm: true, veg: true, photo: "sandwich-photo.jpg", photoPos: "50% 70%" },
-  { name: "Celcius 0,25l",     by: "Added by Nicole. H", img: "can.png",      variant: "can" },
+  { name: "Redbull",            by: "Added by Unna L.", img: "can.png",         variant: "can", photo: "redbull-photo.jpg", photoPos: "50% 56%" },
+  { name: "Donut",              by: "Added by Aram K.", img: "donut.png",       variant: "contain" },
+  { name: "Joulutorttu",        by: "Made by Noor",     img: "joulutorttu.png", warm: true },
+  { name: "Redbull sugar free", by: "Added by Unna L.", img: "can.png",         variant: "can" },
 ];
 
 // What the person who added each item wrote about it, shown on the item's
 // details sheet. Keyed by item name; "\n" starts a new line.
-// Banana is the text from the Figma design; the others are placeholders.
+// Placeholders: the Figma design doesn't include descriptions for these items.
 const descriptions = {
-  "Banana": "I bought this a few days ago at K-Supermarket and would like to get rid of it because I am leaving on a one month trip to Spain.\nThe banana was green when I bought it an is in good condition now.",
-  "Banana (browning)": "A bit brown on the outside but still good inside. Great for smoothies or banana bread.",
-  "Redbull 0,25l": "Unopened can. I bought a pack of four and only needed three.",
-  "Celcius 0,25l": "Unopened can from a multipack. Not my favourite flavour, so someone else should enjoy it.",
-  "Egg Sandwich": "Made this morning with free-range eggs and fresh bread.",
-  "Sandwich": "Ham and cheese sandwich made at lunchtime. I made one too many for a meeting.",
-  "Eggs": "Four free-range eggs, best before next week. Left over after baking.",
-  "Yogurt": "Unopened blueberry Greek yogurt, best before Friday.",
+  "Redbull": "Unopened can. I bought a pack of four and only needed three.",
+  "Donut": "Bought this morning from the bakery but I'm too full to eat it.",
+  "Joulutorttu": "Home-made Finnish Christmas pastries with plum jam, baked yesterday.",
+  "Redbull sugar free": "Unopened can. Picked up the sugar free one by mistake.",
 };
 
 // Home made items only: "Contains" tags on the details sheet, keyed by item name.
 // Items not listed here (store-bought) show no Contains section.
-// Egg Sandwich is from the Figma design; Sandwich is a placeholder.
+// Placeholder tags: joulutorttu is usually puff pastry (gluten, butter) and plum jam.
 const contains = {
-  "Egg Sandwich": ["Eggs", "Dairy", "Gluten"],
-  "Sandwich": ["Meat", "Dairy", "Gluten"],
+  "Joulutorttu": ["Gluten", "Dairy"],
 };
 
 // Approximate edible weight of one of each item, in grams. Used for "You saved
 // approximately … of food" on the confirmation page (quantity × weight, summed).
 const GRAMS = {
-  "Redbull 0,25l": 250,     // 250 ml can
-  "Celcius 0,25l": 250,     // 250 ml can
-  "Banana": 120,            // one medium banana, peeled
-  "Banana (browning)": 120,
-  "Egg Sandwich": 180,
-  "Sandwich": 200,
-  "Eggs": 200,              // four eggs, ~50 g each
-  "Yogurt": 150,            // one pot
+  "Redbull": 250,             // 250 ml can
+  "Redbull 0,25l": 250,       // the product the scanner adds
+  "Redbull sugar free": 250,  // 250 ml can
+  "Donut": 70,                // one glazed ring donut
+  "Joulutorttu": 40,          // one star pastry
 };
 const DEFAULT_GRAMS = 250;  // a scanned product with an unknown name: about one can or pack
 // Store-bought names typed on Product details may use "." instead of "," ("Redbull 0.25l").
