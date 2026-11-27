@@ -1198,7 +1198,6 @@ html.sheet-open, html.sheet-open body { overflow: hidden; }
   line-height: 16px;
   color: var(--text-secondary);
 }
-.profile__divider { width: 100%; height: 1px; }
 
 .stat {
   padding: 24px;
