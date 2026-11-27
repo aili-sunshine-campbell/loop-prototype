@@ -6,7 +6,6 @@ const items = [
   { name: "Redbull",            by: "Added by Unna L.", img: "can.png",         variant: "can",     photo: "redbull-photo.jpg",     photoPos: "50% 40%" },
   { name: "Donut",              by: "Added by Aram K.", img: "donut.png",       variant: "contain", photo: "donut-photo.jpg",       photoPos: "50% 52%" },
   { name: "Joulutorttu",        by: "Made by Noor Y.",  img: "joulutorttu.png", warm: true,         photo: "joulutorttu-photo.jpg", photoPos: "50% 56%" },
-  { name: "Redbull sugar free", by: "Added by Unna L.", img: "can.png",         variant: "can",     photo: "redbull-sf-photo.jpg",  photoPos: "50% 35%" },
 ];
 
 // What the person who added each item wrote about it, shown on the item's
@@ -16,7 +15,6 @@ const descriptions = {
   "Redbull": "Unopened can. I bought a pack of four and only needed three.",
   "Donut": "Bought this morning from the bakery but I'm too full to eat it.",
   "Joulutorttu": "Home-made Finnish Christmas pastries with plum jam, baked yesterday.",
-  "Redbull sugar free": "Unopened can. Picked up the sugar free one by mistake.",
 };
 
 // Home made items only: "Contains" tags on the details sheet, keyed by item name.
@@ -31,7 +29,6 @@ const contains = {
 const GRAMS = {
   "Redbull": 250,             // 250 ml can
   "Redbull 0,25l": 250,       // the product the scanner adds
-  "Redbull sugar free": 250,  // 250 ml can
   "Donut": 70,                // one glazed ring donut
   "Joulutorttu": 40,          // one star pastry
 };
