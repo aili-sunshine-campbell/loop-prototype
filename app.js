@@ -3,7 +3,6 @@
 // `photoPos` (optional): which part of the photo to keep in the 240px-tall frame,
 // as CSS object-position ("50% 0%" = top, "50% 100%" = bottom). Default: centre.
 const items = [
-  { name: "Redbull",            by: "Added by Unna L.", img: "can.png",         variant: "can",     photo: "redbull-photo.jpg",     photoPos: "50% 40%" },
   { name: "Donut",              by: "Added by Aram K.", img: "donut.png",       variant: "contain", photo: "donut-photo.jpg",       photoPos: "50% 52%" },
   { name: "Joulutorttu",        by: "Made by Noor Y.",  img: "joulutorttu.png", warm: true,         photo: "joulutorttu-photo.jpg", photoPos: "50% 56%" },
 ];
@@ -12,7 +11,6 @@ const items = [
 // details sheet. Keyed by item name; "\n" starts a new line.
 // Placeholders: the Figma design doesn't include descriptions for these items.
 const descriptions = {
-  "Redbull": "Unopened can. I bought a pack of four and only needed three.",
   "Donut": "Bought this morning from the bakery but I'm too full to eat it.",
   "Joulutorttu": "Home-made Finnish Christmas pastries with plum jam, baked yesterday.",
 };
@@ -27,7 +25,6 @@ const contains = {
 // Approximate edible weight of one of each item, in grams. Used for "You saved
 // approximately … of food" on the confirmation page (quantity × weight, summed).
 const GRAMS = {
-  "Redbull": 250,             // 250 ml can
   "Redbull 0,25l": 250,       // the product the scanner adds
   "Donut": 70,                // one glazed ring donut
   "Joulutorttu": 40,          // one star pastry
