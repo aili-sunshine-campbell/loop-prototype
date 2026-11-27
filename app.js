@@ -5,7 +5,7 @@
 const items = [
   { name: "Redbull",            by: "Added by Unna L.", img: "can.png",         variant: "can",     photo: "redbull-photo.jpg",     photoPos: "50% 40%" },
   { name: "Donut",              by: "Added by Aram K.", img: "donut.png",       variant: "contain", photo: "donut-photo.jpg",       photoPos: "50% 52%" },
-  { name: "Joulutorttu",        by: "Made by Noor",     img: "joulutorttu.png", warm: true,         photo: "joulutorttu-photo.jpg", photoPos: "50% 56%" },
+  { name: "Joulutorttu",        by: "Made by Noor Y.",  img: "joulutorttu.png", warm: true,         photo: "joulutorttu-photo.jpg", photoPos: "50% 56%" },
   { name: "Redbull sugar free", by: "Added by Unna L.", img: "can.png",         variant: "can",     photo: "redbull-sf-photo.jpg",  photoPos: "50% 35%" },
 ];
 
