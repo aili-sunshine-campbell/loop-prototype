@@ -6,14 +6,14 @@
   <meta name="theme-color" content="#f66b25">
   <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; font-src 'self'; media-src 'self'; connect-src 'none'; base-uri 'none'; form-action 'none'; object-src 'none'">
   <title>Loop</title>
-  <link rel="stylesheet" href="styles.css?v=31">
+  <link rel="stylesheet" href="styles.css?v=32">
 </head>
 <body>
   <div class="app">
     <header class="toolbar">
       <div class="toolbar__row">
         <img class="logo" src="assets/coolloop-logo-white.svg" width="524" height="154" alt="Cool Loop">
-        <button class="icon-btn" type="button" aria-label="Profile">
+        <button class="icon-btn" type="button" id="profile-btn" aria-label="Your profile" data-nav="forward">
           <img src="assets/user.svg" width="18" height="20" alt="">
         </button>
       </div>
@@ -247,6 +247,39 @@
       <div id="details-dates"></div>
     </main>
 
+    <!-- Your Profile (Figma 55977:12356), from the user icon in the toolbar -->
+    <main class="content" id="view-profile" hidden>
+      <div class="page-head">
+        <button class="page-head__back" type="button" id="profile-back-btn" aria-label="Back">
+          <img src="assets/chevron-back.svg" width="24" height="24" alt="">
+        </button>
+        <h1 class="page-head__title">Your Profile</h1>
+      </div>
+
+      <div class="profile">
+        <div class="profile__avatar" aria-hidden="true">AC</div>
+        <div class="profile__text">
+          <p class="profile__name">Aili Campbell</p>
+          <p class="profile__joined">Joined 4/6/2026</p>
+        </div>
+      </div>
+
+      <img class="profile__divider" src="assets/divider.svg" width="369" height="1" alt="">
+
+      <section class="stat">
+        <p class="overline"><span>Food saved by you</span></p>
+        <p class="stat__value" id="saved-by-you"></p>
+      </section>
+      <section class="stat">
+        <p class="overline"><span>Food saved by Tuas</span></p>
+        <p class="stat__value" id="saved-by-tuas"></p>
+      </section>
+      <section class="stat">
+        <p class="overline"><span>Food saved by Undergraduate Center</span></p>
+        <p class="stat__value" id="saved-by-ugc"></p>
+      </section>
+    </main>
+
     <main class="content" id="view-pending" hidden>
       <div class="page-head">
         <button class="page-head__back" type="button" id="pending-back-btn" aria-label="Back">
@@ -407,6 +440,6 @@
     </li>
   </template>
 
-  <script src="app.js?v=30"></script>
+  <script src="app.js?v=32"></script>
 </body>
 </html>

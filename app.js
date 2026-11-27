@@ -55,6 +55,18 @@ const DEFAULT_GRAMS = 250;  // a scanned product with an unknown name: about one
 // Store-bought names typed on Product details may use "." instead of "," ("Redbull 0.25l").
 const gramsOf = (name) => GRAMS[name] ?? GRAMS[name.replace(".", ",")] ?? DEFAULT_GRAMS;
 
+// Profile totals (Figma 55977:12356). The design's numbers are the starting point;
+// food saved in this session (taking items, see confirm) is added to "you" and to
+// Tuas, the fridge this prototype is set at.
+const SAVED_START = { you: 2545, tuas: 20552, ugc: 14503 };
+let savedThisSession = 0;
+const fmtGrams = (g) => `${Math.round(g).toLocaleString("en-US")}g`;
+function renderProfile() {
+  $("saved-by-you").textContent = fmtGrams(SAVED_START.you + savedThisSession);
+  $("saved-by-tuas").textContent = fmtGrams(SAVED_START.tuas + savedThisSession);
+  $("saved-by-ugc").textContent = fmtGrams(SAVED_START.ugc);
+}
+
 function formatWeight(g) {
   return g >= 1000 ? `${(g / 1000).toFixed(1).replace(/\.0$/, "")} kg` : `${Math.round(g)} grams`;
 }
@@ -336,7 +348,7 @@ function updateChrome() {
   $("add-to-fridge-count").textContent = pendingTotal();
   $("add-to-fridge-btn").disabled = pendingTotal() === 0;
   $("take-btn").disabled = t === 0;
-  app.classList.toggle("has-cta", (v !== "list" && v !== "scan") || (v === "list" && (reserved || t > 0)));
+  app.classList.toggle("has-cta", (v !== "list" && v !== "scan" && v !== "profile") || (v === "list" && (reserved || t > 0)));
   app.classList.toggle("on-scan", v === "scan");
 }
 
@@ -392,6 +404,8 @@ function route() {
   $("view-scan").hidden = v !== "scan";
   $("view-details").hidden = v !== "details";
   $("view-pending").hidden = v !== "pending";
+  $("view-profile").hidden = v !== "profile";
+  if (v === "profile") renderProfile();
   if (v === "pending") renderPending();
   if (v === "details" && lastView !== "details") openDetails();
   if (v === "scan") startScanner(); else stopScanner();
@@ -433,6 +447,7 @@ $("confirm-btn").addEventListener("click", () => {
   }
   const saved = items.reduce((g, item, i) => g + counts[i] * gramsOf(item.name), 0);
   $("saved-take").textContent = formatWeight(saved);
+  savedThisSession += saved;
   stopTimer();
   doneWasReserved = !!reservedUntil;
   clearInterval(reservedTickId);
@@ -442,6 +457,15 @@ $("confirm-btn").addEventListener("click", () => {
   route();
 });
 $("home-btn").addEventListener("click", goToList);
+
+// Profile: the user icon in the toolbar opens it from any screen; Back returns.
+$("profile-btn").addEventListener("click", () => {
+  if (view() !== "profile") location.hash = "profile";
+});
+$("profile-back-btn").addEventListener("click", () => {
+  if (history.length > 1) history.back();
+  else goToList();
+});
 
 document.querySelectorAll('[data-go="reserve"]').forEach((btn) =>
   btn.addEventListener("click", () => { location.hash = "reserve"; })
