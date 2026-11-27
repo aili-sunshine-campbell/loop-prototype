@@ -3,10 +3,10 @@
 // `photoPos` (optional): which part of the photo to keep in the 240px-tall frame,
 // as CSS object-position ("50% 0%" = top, "50% 100%" = bottom). Default: centre.
 const items = [
-  { name: "Redbull",            by: "Added by Unna L.", img: "can.png",         variant: "can", photo: "redbull-photo.jpg", photoPos: "50% 56%" },
-  { name: "Donut",              by: "Added by Aram K.", img: "donut.png",       variant: "contain" },
-  { name: "Joulutorttu",        by: "Made by Noor",     img: "joulutorttu.png", warm: true },
-  { name: "Redbull sugar free", by: "Added by Unna L.", img: "can.png",         variant: "can" },
+  { name: "Redbull",            by: "Added by Unna L.", img: "can.png",         variant: "can",     photo: "redbull-photo.jpg",     photoPos: "50% 40%" },
+  { name: "Donut",              by: "Added by Aram K.", img: "donut.png",       variant: "contain", photo: "donut-photo.jpg",       photoPos: "50% 52%" },
+  { name: "Joulutorttu",        by: "Made by Noor",     img: "joulutorttu.png", warm: true,         photo: "joulutorttu-photo.jpg", photoPos: "50% 56%" },
+  { name: "Redbull sugar free", by: "Added by Unna L.", img: "can.png",         variant: "can",     photo: "redbull-sf-photo.jpg",  photoPos: "50% 35%" },
 ];
 
 // What the person who added each item wrote about it, shown on the item's
